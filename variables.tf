@@ -17,7 +17,7 @@ EOT
     namespace_path       = string
     resource_group_name  = string
     storage_container_id = string
-    access_policy_name   = optional(string, "default")
+    access_policy_name   = optional(string) # Default: "default"
   }))
 }
 
