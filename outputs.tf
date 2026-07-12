@@ -1,3 +1,7 @@
+output "hpc_cache_blob_targets_id" {
+  description = "Map of id values across all hpc_cache_blob_targets, keyed the same as var.hpc_cache_blob_targets"
+  value       = { for k, v in azurerm_hpc_cache_blob_target.hpc_cache_blob_targets : k => v.id }
+}
 output "hpc_cache_blob_targets_access_policy_name" {
   description = "Map of access_policy_name values across all hpc_cache_blob_targets, keyed the same as var.hpc_cache_blob_targets"
   value       = { for k, v in azurerm_hpc_cache_blob_target.hpc_cache_blob_targets : k => v.access_policy_name }
