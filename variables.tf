@@ -17,24 +17,8 @@ EOT
     namespace_path       = string
     resource_group_name  = string
     storage_container_id = string
-    access_policy_name   = optional(string) # Default: "default"
+    access_policy_name   = optional(string)
   }))
-  validation {
-    condition = alltrue([
-      for k, v in var.hpc_cache_blob_targets : (
-        length(v.cache_name) > 0
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.hpc_cache_blob_targets : (
-        v.access_policy_name == null || (length(v.access_policy_name) > 0)
-      )
-    ])
-    error_message = "must not be empty"
-  }
   # --- Unconfirmed validation candidates, derived from azurerm_hpc_cache_blob_target's provider source ---
   # Not auto-enabled: either a bespoke provider validator we can't safely translate,
   # or a path that crosses a list-typed block (needs its own for_each wrapping).
@@ -43,6 +27,9 @@ EOT
   #   source:    [from validate.StorageTargetName] !ok
   # path: name
   #   source:    [from validate.StorageTargetName] !p.MatchString(v)
+  # path: cache_name
+  #   condition: length(value) > 0
+  #   message:   must not be empty
   # path: resource_group_name
   #   condition: length(value) <= 90
   #   message:   [from resourcegroups.ValidateName: invalid when len(value) > 90]
@@ -63,5 +50,8 @@ EOT
   #   source:    [from commonids.ValidateStorageContainerID] !ok
   # path: storage_container_id
   #   source:    [from commonids.ValidateStorageContainerID] err != nil
+  # path: access_policy_name
+  #   condition: length(value) > 0
+  #   message:   must not be empty
 }
 
